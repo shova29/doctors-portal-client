@@ -34,10 +34,7 @@ const Footer = () => {
       </div>
       <div className="my-16 text-center">
         {" "}
-        <p>
-          Copyright © {new Date().getFullYear()} - All right reserved by ACME
-          Industries Ltd
-        </p>
+        <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
       </div>
     </footer>
   );
