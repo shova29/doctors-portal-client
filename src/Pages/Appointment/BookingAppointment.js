@@ -1,17 +1,46 @@
 import { format } from "date-fns";
 import React from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import auth from "../../firebase.init";
+import { toast } from "react-toastify";
 
-const BookingAppointment = ({ date, treatment, setTreatment }) => {
+const BookingAppointment = ({ date, treatment, setTreatment, refetch }) => {
   const { _id, name, slots } = treatment;
+  const [user] = useAuthState(auth);
+  const formattedDate = format(date, "PP");
 
   const handleBooking = (event) => {
     event.preventDefault();
     const slot = event.target.slot.value;
-    // const name = event.target.name.value;
-    // const email = event.target.email.value;
-    const phone = event.target.phone.value;
-    console.log(_id, name, slot);
-    setTreatment(null);
+    const booking = {
+      treatmentId: _id,
+      treatment: name,
+      date: formattedDate,
+      slot,
+      patientEmail: user.email,
+      patientName: user.displayName,
+      phone: event.target.phone.value,
+    };
+
+    fetch("http://localhost:5000/booking", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(booking),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.success)
+          toast(`Appointment is set on ${formattedDate} at ${slot}`);
+        else
+          toast.error(
+            `Already have an Appointment on ${data.booking?.date} at ${data.booking?.slot}`
+          );
+        refetch();
+        setTreatment(null);
+      });
   };
   return (
     <div>
@@ -23,8 +52,8 @@ const BookingAppointment = ({ date, treatment, setTreatment }) => {
       <div className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
           <label
-            for="booking-appointment"
-            class="btn btn-sm btn-circle absolute right-2 top-2"
+            htmlFor="booking-appointment"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
           >
             ✕
           </label>
@@ -40,35 +69,42 @@ const BookingAppointment = ({ date, treatment, setTreatment }) => {
               disabled
               readOnly
               value={format(date, "PP")}
-              class="input input-bordered w-full max-w-xs"
+              className="input input-bordered w-full max-w-xs"
             />
-            <select name="slot" class="select select-bordered w-full max-w-xs">
-              {slots.map((slot) => (
-                <option value={slot}>{slot}</option>
+            <select
+              name="slot"
+              className="select select-bordered w-full max-w-xs"
+            >
+              {slots.map((slot, index) => (
+                <option key={index} value={slot}>
+                  {slot}
+                </option>
               ))}
             </select>
             <input
               type="text"
               name="name"
-              placeholder="Your Name"
-              class="input  input-bordered w-full max-w-xs"
+              disabled
+              value={user?.displayName || ""}
+              className="input  input-bordered w-full max-w-xs"
             />
             <input
               type="email"
               name="email"
-              placeholder="Email Address"
-              class="input  input-bordered w-full max-w-xs"
+              disabled
+              value={user?.email || ""}
+              className="input  input-bordered w-full max-w-xs"
             />
             <input
               type="text"
               name="phone"
               placeholder="Phone Number"
-              class="input  input-bordered w-full max-w-xs"
+              className="input  input-bordered w-full max-w-xs"
             />{" "}
             <input
               type="submit"
               value="Submit"
-              class="btn btn-secondary w-full max-w-xs"
+              className="btn btn-secondary w-full max-w-xs"
             />
           </form>
         </div>

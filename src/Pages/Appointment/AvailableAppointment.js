@@ -1,5 +1,4 @@
 import React from "react";
-import PrimaryButton from "../Shared/PrimaryButton";
 
 const AvailableAppointment = ({ service, setTreatment }) => {
   const { name, slots } = service;
@@ -19,11 +18,12 @@ const AvailableAppointment = ({ service, setTreatment }) => {
         </p>
         <div className="card-actions justify-center">
           <label
-            for="booking-appointment"
-            disabled={slots.length === 0}
+            htmlFor="booking-appointment"
+            disabled={slots.length === 0 && "btn-ghost"}
             onClick={() => setTreatment(service)}
             className="btn btn-sm btn-secondary text-white uppercase bg-gradient-to-r from-secondary to-primary"
           >
+            {" "}
             Book Appointment
           </label>
         </div>
