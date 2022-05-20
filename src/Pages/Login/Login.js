@@ -8,6 +8,7 @@ import {
 import { useForm } from "react-hook-form";
 import Loading from "../Shared/Loading";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import useToken from "../../hooks/useToken";
 
 const Login = () => {
   const [signInWithGoogle, googleUser, googleLoading, googleError] =
@@ -23,14 +24,15 @@ const Login = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const [token] = useToken(user || googleUser);
   let from = location.state?.from?.pathname || "/";
   let signInError;
 
   useEffect(() => {
-    if (user || googleUser) {
+    if (token) {
       navigate(from, { replace: true });
     }
-  }, [user, googleUser, from, navigate]);
+  }, [token, from, navigate]);
 
   if (loading || googleLoading) {
     return <Loading></Loading>;
