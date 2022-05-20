@@ -17,7 +17,7 @@ const BookingAppointment = ({ date, treatment, setTreatment, refetch }) => {
       treatment: name,
       date: formattedDate,
       slot,
-      patientEmail: user.email,
+      patient: user.email,
       patientName: user.displayName,
       phone: event.target.phone.value,
     };
