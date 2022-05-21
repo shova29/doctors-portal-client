@@ -25,10 +25,10 @@ const Users = () => {
         <table className="table w-full">
           <thead>
             <tr>
-              <th></th>
+              <th>No</th>
               <th>User</th>
-              <th></th>
-              <th></th>
+              <th>Roll</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -36,12 +36,12 @@ const Users = () => {
               <UserRow key={user._id} user={user} index={index}></UserRow>
             ))} */}
 
-            {users?.map((user) => (
+            {users?.map((user, index) => (
               <UserRow
                 key={user?._id}
                 user={user}
                 refetch={refetch}
-                // index={index}
+                index={index}
               ></UserRow>
             ))}
           </tbody>

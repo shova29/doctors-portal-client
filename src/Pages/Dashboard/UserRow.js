@@ -1,14 +1,28 @@
 import React from "react";
 
-const UserRow = ({ user }) => {
+const UserRow = ({ user, index }) => {
   const { email } = user;
+  const makeAdmin = () => {
+    fetch(`http://localhost:5000/user/admin/${email}`, {
+      method: "PUT",
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+  };
   return (
     <tr>
-      {/* <th>{index + 1}</th> */}
-      <th>1</th>
+      <th>{index + 1}</th>
+
       <td>{email}</td>
       <td>
-        <button className="btn btn-xs">Make Admin</button>
+        <button onClick={makeAdmin} className="btn btn-xs">
+          Make Admin
+        </button>
       </td>
       <td>
         <button className="btn btn-xs">Remove User</button>

@@ -38,6 +38,7 @@ const AppointmentBanner = ({ date, setDate }) => {
           <style>{css}</style>
           <DayPicker
             mode="single"
+            required
             selected={date}
             onSelect={setDate}
             modifiersClassNames={{
