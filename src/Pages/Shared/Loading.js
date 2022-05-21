@@ -8,7 +8,7 @@ const Loading = () => {
     //   <div className="w-8 h-8 bg-black rounded-full"></div>
     // </div>
     <div className="h-screen flex items-center justify-center ">
-      <div className="w-16 h-16 border-b-2 border-secondary border-gray-900 rounded-full animate-spin"></div>
+      <div className="w-16 h-16 border-b-2 border-secondary rounded-full animate-spin"></div>
     </div>
   );
 };

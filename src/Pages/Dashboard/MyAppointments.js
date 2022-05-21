@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useNavigation } from "react-day-picker";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { signOut } from "firebase/auth";
 import auth from "../../firebase.init";
+import { useNavigate } from "react-router-dom";
 
 const MyAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [user] = useAuthState(auth);
-  const navigate = useNavigation();
+  const navigate = useNavigate();
   useEffect(() => {
     if (user) {
       fetch(`http://localhost:5000/booking?patient=${user.email}`, {
@@ -17,8 +17,7 @@ const MyAppointments = () => {
         },
       })
         .then((res) => {
-          console.log(res);
-          if (res.status(401) || res.status(403)) {
+          if (res.status === 401 || res.status === 403) {
             signOut(auth);
             localStorage.removeItem("accessToken");
             navigate("/home");
@@ -45,7 +44,7 @@ const MyAppointments = () => {
           </thead>
           <tbody>
             {appointments?.map((appointment, index) => (
-              <tr>
+              <tr key={index}>
                 <th>{index + 1}</th>
                 <td>{appointment?.patientName}</td>
                 <td>{appointment?.date}</td>
