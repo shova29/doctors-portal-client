@@ -19,7 +19,7 @@ const AddDoctor = () => {
   const imageStorageKey = "926c6572400734b0dd7ce0fe693d9ac6";
 
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
     const image = data.image[0];
     const formData = new FormData();
     formData.append("image", image);
@@ -30,26 +30,25 @@ const AddDoctor = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log("imgbb", result);
+        // console.log("imgbb", result);
         if (result.success) {
           const img = result.data.url;
           const doctor = {
             name: data.name,
             email: data.email,
-            speciality: data.speciality,
+            specialty: data.specialty,
             img: img,
           };
-          fetch("http://localhost:5000/doctor", {
+          fetch(`http://localhost:5000/doctor`, {
             method: "POST",
             headers: {
-              "content-type": "appplication/json",
+              "content-type": "application/json",
               authorization: `Bearer ${localStorage.getItem("accessToken")}`,
             },
             body: JSON.stringify(doctor),
           })
             .then((res) => res.json())
             .then((inserted) => {
-              console.log(inserted);
               if (inserted.insertedId) {
                 toast.success("Doctor Added Successfully");
                 reset();
@@ -60,12 +59,14 @@ const AddDoctor = () => {
         }
       });
   };
+
   if (isLoading) {
     return <Loading></Loading>;
   }
   return (
     <div>
       <h2 className="text-2xl text-center">Add a New Doctor</h2>
+
       <form onSubmit={handleSubmit(onSubmit)} className="ml-8 mx-auto">
         <div className="form-control w-full max-w-xs">
           <label className="label">
@@ -124,10 +125,10 @@ const AddDoctor = () => {
         </div>
         <div className="form-control w-full max-w-xs">
           <label className="label">
-            <span className="label-text">Speciality</span>
+            <span className="label-text">Specialty</span>
           </label>
           <select
-            {...register("speciality")}
+            {...register("specialty")}
             className="select  input-bordered w-full max-w-xs"
           >
             {services.map((service) => (
@@ -170,14 +171,3 @@ const AddDoctor = () => {
 };
 
 export default AddDoctor;
-
-/*
-* 
-    
-    //       
-    //       
-    //      
-    //         
-    //     }
-    //   });
-*/
